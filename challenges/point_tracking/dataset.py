@@ -867,8 +867,7 @@ def add_tracks(data,
   Args:
     data: Kubric data, including RGB/depth/object coordinate/segmentation
       videos and camera parameters.
-    train_size: Cropped output will be at this resolution.  Ignored if
-      random_crop is False.
+    train_size: Output will be at this resolution.
     vflip: whether to vertically flip images and tracks (to test generalization)
     random_crop: Whether to randomly crop videos
     tracks_to_sample: Total number of tracks to sample per video.
@@ -940,6 +939,9 @@ def add_tracks(data,
   relative_depth.set_shape([tracks_to_sample, num_frames])
   occluded.set_shape([tracks_to_sample, num_frames])
 
+  query_points *= [1, train_size[0] / shp[1], train_size[1] / shp[2]]
+  target_points *= [train_size[1] / shp[2], train_size[0] / shp[1]]
+
   # Crop the video to the sampled window, in a way which matches the coordinate
   # frame produced the track_points functions.
   start = tf.tensor_scatter_nd_update(
@@ -983,7 +985,7 @@ def create_point_tracking_dataset(
   """Construct a dataset for point tracking using Kubric.
 
   Args:
-    train_size: Tuple of 2 ints. Cropped output will be at this resolution
+    train_size: Tuple of 2 ints. Output will be at this resolution
     shuffle_buffer_size: Int. Size of the shuffle buffer
     split: Which split to construct from Kubric.  Can be 'train' or
       'validation'.
