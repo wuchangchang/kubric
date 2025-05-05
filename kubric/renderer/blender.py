@@ -476,9 +476,10 @@ class Blender(core.View):
                 bpy.ops.object.delete()
 
             assert len(bpy.context.selected_objects) == 1
-            blender_obj = bpy.context.selected_objects[0]
-            blender_obj.rotation_quaternion = (0.707107, -0.707107, 0, 0)
-            bpy.ops.object.transform_apply(location=False, rotation=True, scale=False)
+            if not obj.do_not_rotate_glb_90_degrees_after_import:
+              blender_obj = bpy.context.selected_objects[0]
+              blender_obj.rotation_quaternion = (0.707107, -0.707107, 0, 0)
+              bpy.ops.object.transform_apply(location=False, rotation=True, scale=False)
 
           elif extension == "fbx":
             bpy.ops.import_scene.fbx(filepath=obj.render_filename,
