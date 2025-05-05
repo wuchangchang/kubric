@@ -302,4 +302,10 @@ class FileBasedObject(PhysicalObject):
   # is used in a physics simulation.
   use_parenting_instead_of_join = tl.Bool(False)
 
+  # By default, the objects are rotated by 90 degrees around the X axis after
+  # loading. This is to reproduce the behavior of Blender UI. If this is set to
+  # True, the object will not be rotated by 90 degrees around the X axis after
+  # loading.
+  do_not_rotate_glb_90_degrees_after_import = tl.Bool(False)
+
   # TODO: trigger error when changing filenames or asset-id after the fact
